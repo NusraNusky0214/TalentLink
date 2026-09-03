@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentLink - Freelancer Portfolio & Client Matching Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Dark Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            overflow: hidden;
+        }
+
+        /* Animated Gradient Overlay */
+        .gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Floating Neon Circles */
+        .circle {
+            position: absolute;
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float linear infinite;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Neon Particles */
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, #00ffff, #ff00ff);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: drift linear infinite;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateX(-100vw) translateY(0);
+            }
+            100% {
+                transform: translateX(100vw) translateY(100px);
+            }
+        }
+
+        /* Dark Wave */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(0,255,255,0.05)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            background-size: cover;
+            animation: wave 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes wave {
+            0% {
+                background-position-x: 0;
+            }
+            100% {
+                background-position-x: 1440px;
+            }
+        }
+
+        /* Shooting Stars */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0,255,255,0.8);
+            animation: shoot 3s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0) rotate(45deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(200px) translateY(200px) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Glowing Stars (Static) */
+        .glow-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-card {
+            background: rgba(15, 12, 41, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: slideUp 0.5s ease;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 5px rgba(0,255,255,0.5);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(0,255,255,0.8);
+            }
+        }
+
+        .auth-header p {
+            color: #aaa;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: rgba(30, 30, 50, 0.9);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #ddd;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #ddd;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .sidebar {
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .user-info {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 15px;
+            animation: avatarPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(0,255,255,0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px rgba(0,255,255,0.8);
+            }
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .user-role {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ccc;
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+            color: #00ffff;
+            border-left: 3px solid #00ffff;
+        }
+
+        .main-content {
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            min-height: 600px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .project-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-color: rgba(0, 255, 255, 0.5);
+        }
+
+        .project-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #00ffff;
+        }
+
+        .project-description {
+            color: #ccc;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .skill {
+            background: rgba(0, 255, 255, 0.2);
+            color: #00ffff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .match-score {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .match-high {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .match-medium {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        .match-low {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff4444;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .budget {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff00ff;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-bid {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: white;
+        }
+
+        .btn-bid:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .btn-disabled {
+            background: #555;
+            cursor: not-allowed;
+            color: #999;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .portfolio-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .portfolio-card h3 {
+            color: #00ffff;
+        }
+
+        .review-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff00ff;
+        }
+
+        .rating {
+            color: #ff00ff;
+            margin-bottom: 10px;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid #00ffff;
+            color: white;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .modal-header h3 {
+            font-size: 24px;
+            color: #00ffff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #00ffff;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-submit {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #00ffff;
+        }
+
+        h3 {
+            margin-bottom: 15px;
+            color: #ff00ff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // ==================== DATABASE ====================
+        let db = {
+            users: [],
+            portfolios: [],
+            projects: [],
+            reviews: [],
+            bids: [],
+            currentUser: null
+        };
+
+        // Currency conversion: USD to LKR (approx 1 USD = 300 LKR)
+        const USD_TO_LKR = 300;
+
+        function convertToLKR(usdAmount) {
+            return Math.round(usdAmount * USD_TO_LKR);
+        }
+
+        // Initialize demo data with LKR values
+        function initDatabase() {
+            if (!localStorage.getItem('talentlink_lkr_v2')) {
+                db.users = [
+                    { id: 1, email: 'freelancer@example.com', password: '123', name: 'Emma Watson', role: 'freelancer', skills: ['React', 'Node.js', 'MongoDB', 'Tailwind'], hourlyRate: 45 },
+                    { id: 2, email: 'client@example.com', password: '123', name: 'Michael Chen', role: 'client', company: 'TechStart Inc' }
+                ];
+                
+                db.portfolios = [
+                    { userId: 1, title: 'E-commerce Dashboard', description: 'Full-stack MERN application with real-time analytics', skills: ['React', 'Node.js', 'MongoDB'] },
+                    { userId: 1, title: 'Portfolio Website', description: 'Modern responsive portfolio with animations', skills: ['React', 'Tailwind'] }
+                ];
+                
+                // Projects stored in USD but display in LKR
+                db.projects = [
+                    { id: 1, title: 'React Dashboard Development', description: 'Need a React expert to build an admin dashboard with charts and tables.', budgetUSD: 800, skills: ['React', 'Tailwind', 'Node.js'], postedBy: 2, status: 'open' },
+                    { id: 2, title: 'UI/UX Design for Mobile App', description: 'Looking for a creative designer to redesign our fitness app.', budgetUSD: 500, skills: ['Figma', 'UI/UX', 'Adobe XD'], postedBy: 2, status: 'open' },
+                    { id: 3, title: 'Python Backend API', description: 'Build RESTful API with Django and PostgreSQL.', budgetUSD: 1200, skills: ['Python', 'Django', 'PostgreSQL'], postedBy: 2, status: 'open' }
+                ];
+                
+                db.reviews = [
+                    { id: 1, revieweeId: 1, reviewerId: 2, rating: 5, comment: 'Excellent work! Very professional.', projectId: 1 }
+                ];
+                
+                db.bids = [];
+                
+                saveToLocalStorage();
+            } else {
+                loadFromLocalStorage();
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('talentlink_lkr_v2_users', JSON.stringify(db.users));
+            localStorage.setItem('talentlink_lkr_v2_portfolios', JSON.stringify(db.portfolios));
+            localStorage.setItem('talentlink_lkr_v2_projects', JSON.stringify(db.projects));
+            localStorage.setItem('talentlink_lkr_v2_reviews', JSON.stringify(db.reviews));
+            localStorage.setItem('talentlink_lkr_v2_bids', JSON.stringify(db.bids));
+        }
+
+        function loadFromLocalStorage() {
+            db.users = JSON.parse(localStorage.getItem('talentlink_lkr_v2_users'));
+            db.portfolios = JSON.parse(localStorage.getItem('talentlink_lkr_v2_portfolios'));
+            db.projects = JSON.parse(localStorage.getItem('talentlink_lkr_v2_projects'));
+            db.reviews = JSON.parse(localStorage.getItem('talentlink_lkr_v2_reviews'));
+            db.bids = JSON.parse(localStorage.getItem('talentlink_lkr_v2_bids'));
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function login(email, password) {
+            const user = db.users.find(u => u.email === email && u.password === password);
+            if (user) {
+                db.currentUser = user;
+                localStorage.setItem('talentlink_lkr_session_v2', JSON.stringify(user));
+                return true;
+            }
+            return false;
+        }
+
+        function register(name, email, password, role, skills, hourlyRate) {
+            if (db.users.find(u => u.email === email)) return false;
+            const newUser = { id: db.users.length + 1, name, email, password, role };
+            if (role === 'freelancer') {
+                newUser.skills = skills ? skills.split(',').map(s => s.trim()) : [];
+                newUser.hourlyRate = parseInt(hourlyRate) || 30;
+            } else {
+                newUser.company = '';
+            }
+            db.users.push(newUser);
+            saveToLocalStorage();
+            return true;
+        }
+
+        function logout() {
+            db.currentUser = null;
+            localStorage.removeItem('talentlink_lkr_session_v2');
+            render();
+        }
+
+        function getMatchScore(freelancerSkills, projectSkills) {
+            if (!freelancerSkills?.length || !projectSkills?.length) return 0;
+            const matched = freelancerSkills.filter(s => projectSkills.includes(s));
+            return (matched.length / projectSkills.length) * 100;
+        }
+
+        function placeBid(projectId, amountLKR, message) {
+            const existingBid = db.bids.find(b => b.projectId === projectId && b.freelancerId === db.currentUser.id);
+            if (existingBid) { showToast('You have already bid on this project', 'error'); return false; }
+            db.bids.push({
+                id: db.bids.length + 1,
+                projectId,
+                freelancerId: db.currentUser.id,
+                amountLKR: parseInt(amountLKR),
+                message: message || '',
+                status: 'pending'
+            });
+            saveToLocalStorage();
+            showToast('Bid placed successfully!');
+            return true;
+        }
+
+        function addReview(revieweeId, rating, comment) {
+            db.reviews.push({ id: db.reviews.length + 1, revieweeId, reviewerId: db.currentUser.id, rating: parseInt(rating), comment, projectId: 1 });
+            saveToLocalStorage();
+            showToast('Review submitted!');
+        }
+
+        function getAverageRating(userId) {
+            const userReviews = db.reviews.filter(r => r.revieweeId === userId);
+            if (!userReviews.length) return 0;
+            return (userReviews.reduce((acc, r) => acc + r.rating, 0) / userReviews.length).toFixed(1);
+        }
+
+        function addPortfolio(title, description, skills) {
+            db.portfolios.push({ userId: db.currentUser.id, title, description, skills: skills.split(',').map(s => s.trim()) });
+            saveToLocalStorage();
+            showToast('Portfolio item added!');
+        }
+
+        function addProject(title, description, budgetUSD, skills) {
+            db.projects.push({
+                id: db.projects.length + 1,
+                title, description,
+                budgetUSD: parseInt(budgetUSD),
+                skills: skills.split(',').map(s => s.trim()),
+                postedBy: db.currentUser.id,
+                status: 'open'
+            });
+            saveToLocalStorage();
+            showToast('Project posted successfully!');
+        }
+
+        // Modal Functions
+        function showCreateProjectModal() {
+            const modalHTML = `
+                <div class="modal-overlay" id="projectModal">
+                    <div class="modal">
+                        <div class="modal-header"><h3>📋 Post New Project</h3><button class="close-btn" onclick="closeProjectModal()">&times;</button></div>
+                        <form id="createProjectForm">
+                            <div class="form-group"><label>Project Title *</label><input type="text" id="projectTitle" required placeholder="e.g., React Dashboard Development"></div>
+                            <div class="form-group"><label>Description *</label><textarea id="projectDescription" rows="4" required placeholder="Describe your project requirements..."></textarea></div>
+                            <div class="form-group"><label>Budget (USD) *</label><input type="number" id="projectBudget" required placeholder="e.g., 800"><small style="color:#888;">Will be shown as LKR</small></div>
+                            <div class="form-group"><label>Skills Required *</label><input type="text" id="projectSkills" required placeholder="e.g., React, Node.js, MongoDB"><small style="color:#888;">Separate with commas</small></div>
+                            <div class="modal-footer"><button type="button" class="btn-cancel" onclick="closeProjectModal()">Cancel</button><button type="submit" class="btn-submit">Post Project</button></div>
+                        </form>
+                    </div>
+                </div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.getElementById('createProjectForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addProject(document.getElementById('projectTitle').value, document.getElementById('projectDescription').value, document.getElementById('projectBudget').value, document.getElementById('projectSkills').value);
+                closeProjectModal();
+                document.getElementById('main-content').innerHTML = (db.currentUser.role === 'client') ? renderClientProjects() : renderDashboard();
+            });
+        }
+
+        function closeProjectModal() { document.getElementById('projectModal')?.remove(); }
+        function showAddPortfolioModal() {
+            const modalHTML = `
+                <div class="modal-overlay" id="portfolioModal">
+                    <div class="modal"><div class="modal-header"><h3>📁 Add Portfolio Item</h3><button class="close-btn" onclick="closePortfolioModal()">&times;</button></div>
+                    <form id="createPortfolioForm"><div class="form-group"><label>Project Title *</label><input type="text" id="portfolioTitle" required></div>
+                    <div class="form-group"><label>Description *</label><textarea id="portfolioDescription" rows="4" required></textarea></div>
+                    <div class="form-group"><label>Skills Used *</label><input type="text" id="portfolioSkills" required placeholder="React, Node.js"><small>Comma separated</small></div>
+                    <div class="modal-footer"><button type="button" class="btn-cancel" onclick="closePortfolioModal()">Cancel</button><button type="submit" class="btn-submit">Add</button></div></form></div></div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.getElementById('createPortfolioForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addPortfolio(document.getElementById('portfolioTitle').value, document.getElementById('portfolioDescription').value, document.getElementById('portfolioSkills').value);
+                closePortfolioModal();
+                document.getElementById('main-content').innerHTML = renderProfile();
+            });
+        }
+        function closePortfolioModal() { document.getElementById('portfolioModal')?.remove(); }
+        
+        function showBidModal(projectId, maxBudgetUSD) {
+            const maxLKR = convertToLKR(maxBudgetUSD);
+            const modalHTML = `
+                <div class="modal-overlay" id="bidModal">
+                    <div class="modal"><div class="modal-header"><h3>💰 Place Your Bid</h3><button class="close-btn" onclick="closeBidModal()">&times;</button></div>
+                    <form id="placeBidForm"><div class="form-group"><label>Your Bid Amount (Rs.) *</label><input type="number" id="bidAmount" required placeholder="${maxLKR}" value="${maxLKR}"></div>
+                    <div class="form-group"><label>Message to Client</label><textarea id="bidMessage" rows="4" placeholder="Introduce yourself..."></textarea></div>
+                    <div class="modal-footer"><button type="button" class="btn-cancel" onclick="closeBidModal()">Cancel</button><button type="submit" class="btn-submit">Submit Bid</button></div></form></div></div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.getElementById('placeBidForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (placeBid(projectId, document.getElementById('bidAmount').value, document.getElementById('bidMessage').value)) {
+                    closeBidModal();
+                    document.getElementById('main-content').innerHTML = renderDashboard();
+                }
+            });
+        }
+        function closeBidModal() { document.getElementById('bidModal')?.remove(); }
+        
+        function showAddReviewModal() {
+            const freelancers = db.users.filter(u => u.role === 'freelancer');
+            if (!freelancers.length) { showToast('No freelancers to review', 'error'); return; }
+            const modalHTML = `
+                <div class="modal-overlay" id="reviewModal"><div class="modal"><div class="modal-header"><h3>⭐ Leave a Review</h3><button class="close-btn" onclick="closeReviewModal()">&times;</button></div>
+                <form id="addReviewForm"><div class="form-group"><label>Select Freelancer</label><select id="reviewFreelancer" required>${freelancers.map(f => `<option value="${f.id}">${f.name}</option>`).join('')}</select></div>
+                <div class="form-group"><label>Rating</label><select id="reviewRating"><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option><option value="2">⭐⭐</option><option value="1">⭐</option></select></div>
+                <div class="form-group"><label>Your Review</label><textarea id="reviewComment" rows="4" required></textarea></div>
+                <div class="modal-footer"><button type="button" class="btn-cancel" onclick="closeReviewModal()">Cancel</button><button type="submit" class="btn-submit">Submit</button></div></form></div></div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.getElementById('addReviewForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addReview(parseInt(document.getElementById('reviewFreelancer').value), document.getElementById('reviewRating').value, document.getElementById('reviewComment').value);
+                closeReviewModal();
+                document.getElementById('main-content').innerHTML = renderReviews();
+            });
+        }
+        function closeReviewModal() { document.getElementById('reviewModal')?.remove(); }
+
+        // RENDER FUNCTIONS (All monetary values now in LKR with Rs symbol)
+        function renderDashboard() {
+            if (db.currentUser.role === 'freelancer') {
+                const openProjects = db.projects.filter(p => p.status === 'open');
+                const matchedProjects = openProjects.map(project => ({
+                    ...project,
+                    matchScore: getMatchScore(db.currentUser.skills || [], project.skills || []),
+                    hasBid: db.bids.some(b => b.projectId === project.id && b.freelancerId === db.currentUser.id),
+                    budgetLKR: convertToLKR(project.budgetUSD)
+                })).sort((a,b) => b.matchScore - a.matchScore);
+                if (!matchedProjects.length) return '<div class="empty-state">No projects available yet</div>';
+                return `<h2>🎯 Recommended Projects</h2>${matchedProjects.map(p => {
+                    const matchClass = p.matchScore >= 70 ? 'match-high' : (p.matchScore >= 40 ? 'match-medium' : 'match-low');
+                    return `<div class="project-card"><div class="project-title">${p.title}</div><div class="match-score ${matchClass}">${Math.round(p.matchScore)}% Match</div>
+                    <div class="project-description">${p.description}</div><div class="skills">${p.skills.map(s => `<span class="skill">${s}</span>`).join('')}</div>
+                    <div class="project-footer"><div class="budget">💰 Rs. ${p.budgetLKR.toLocaleString()}</div>
+                    ${!p.hasBid ? `<button class="btn btn-bid" onclick="window.showBidModal(${p.id}, ${p.budgetUSD})">Place Bid</button>` : '<button class="btn btn-disabled" disabled>Bid Placed ✓</button>'}</div></div>`;
+                }).join('')}`;
+            } else {
+                const myProjects = db.projects.filter(p => p.postedBy === db.currentUser.id);
+                return `<h2>📊 Client Dashboard</h2><button class="btn btn-bid" style="margin-bottom:20px;" onclick="window.showCreateProjectModal()">+ Post New Project</button>
+                <h3>Your Projects (${myProjects.length})</h3>${myProjects.length === 0 ? '<div class="empty-state">No projects posted yet</div>' : 
+                    myProjects.map(p => `<div class="project-card"><div class="project-title">${p.title}</div><div class="project-description">${p.description}</div>
+                    <div class="skills">${p.skills.map(s => `<span class="skill">${s}</span>`).join('')}</div>
+                    <div class="project-footer"><div class="budget">💰 Rs. ${convertToLKR(p.budgetUSD).toLocaleString()}</div><span>📊 ${db.bids.filter(b => b.projectId === p.id).length} bids received</span></div></div>`).join('')}`;
+            }
+        }
+
+        function renderProfile() {
+            const isFreelancer = db.currentUser.role === 'freelancer';
+            const userPortfolios = db.portfolios.filter(p => p.userId === db.currentUser.id);
+            return `<h2>👤 Profile</h2><div class="project-card"><div class="project-title">${db.currentUser.name}</div><div class="project-description">📧 ${db.currentUser.email}</div>
+            ${isFreelancer ? `<div class="skills">${(db.currentUser.skills || []).map(s => `<span class="skill">${s}</span>`).join('')}</div>
+            <div class="budget" style="margin-top:10px;">💰 Hourly Rate: Rs. ${convertToLKR(db.currentUser.hourlyRate).toLocaleString()}/hr</div>` : ''}</div>
+            <h2 style="margin-top:30px;">📁 Portfolio</h2><button class="btn btn-bid" style="margin-bottom:20px;" onclick="window.showAddPortfolioModal()">+ Add Portfolio Item</button>
+            <div class="portfolio-grid">${userPortfolios.length === 0 ? '<div class="empty-state">No portfolio items yet</div>' : 
+                userPortfolios.map(port => `<div class="portfolio-card"><h3>${port.title}</h3><p style="color:#ccc; margin:10px 0;">${port.description}</p>
+                <div class="skills">${port.skills.map(s => `<span class="skill">${s}</span>`).join('')}</div></div>`).join('')}</div>`;
+        }
+
+        function renderBids() {
+            const myBids = db.bids.filter(b => b.freelancerId === db.currentUser.id);
+            if (!myBids.length) return '<div class="empty-state">You haven\'t placed any bids yet</div>';
+            return `<h2>💰 My Bids</h2>${myBids.map(bid => {
+                const project = db.projects.find(p => p.id === bid.projectId);
+                return `<div class="project-card"><div class="project-title">${project?.title || 'Unknown Project'}</div>
+                <div class="project-description">Your bid: Rs. ${bid.amountLKR.toLocaleString()}</div>
+                <div class="project-description">Message: ${bid.message || 'No message'}</div>
+                <div class="project-footer"><span class="skill">Status: ${bid.status}</span></div></div>`;
+            }).join('')}`;
+        }
+
+        function renderClientProjects() {
+            const myProjects = db.projects.filter(p => p.postedBy === db.currentUser.id);
+            return `<h2>📋 My Projects</h2><button class="btn btn-bid" style="margin-bottom:20px;" onclick="window.showCreateProjectModal()">+ Post New Project</button>
+            ${myProjects.length === 0 ? '<div class="empty-state">No projects posted yet</div>' : 
+                myProjects.map(p => `<div class="project-card"><div class="project-title">${p.title}</div><div class="project-description">${p.description}</div>
+                <div class="skills">${p.skills.map(s => `<span class="skill">${s}</span>`).join('')}</div>
+                <div class="project-footer"><div class="budget">💰 Rs. ${convertToLKR(p.budgetUSD).toLocaleString()}</div><span>📊 ${db.bids.filter(b => b.projectId === p.id).length} bids received</span></div></div>`).join('')}`;
+        }
+
+        function renderReviews() {
+            const reviews = db.reviews.filter(r => r.revieweeId === db.currentUser.id);
+            const avgRating = getAverageRating(db.currentUser.id);
+            return `<h2>⭐ Reviews & Ratings</h2><div class="project-card" style="text-align:center;"><div class="project-title">Average Rating</div>
+            <div class="rating" style="font-size:48px;">${'★'.repeat(Math.round(avgRating))}${'☆'.repeat(5 - Math.round(avgRating))}</div>
+            <div class="budget">${avgRating} / 5 (${reviews.length} reviews)</div></div>
+            <h2 style="margin-top:30px;">📝 All Reviews</h2>${reviews.length === 0 ? '<div class="empty-state">No reviews yet</div>' : 
+                reviews.map(r => `<div class="review-card"><div class="rating">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+                <p style="color:#ccc;">${r.comment}</p><small style="color:#888;">- ${db.users.find(u => u.id === r.reviewerId)?.name || 'Anonymous'}</small></div>`).join('')}
+            ${db.currentUser.role === 'client' ? `<button class="btn btn-bid" style="margin-top:20px;" onclick="window.showAddReviewModal()">✍️ Leave a Review</button>` : ''}`;
+        }
+
+        // Navigation and Auth
+        window.switchView = function(view) {
+            const content = document.getElementById('main-content');
+            if (view === 'dashboard') content.innerHTML = renderDashboard();
+            else if (view === 'profile') content.innerHTML = renderProfile();
+            else if (view === 'bids') content.innerHTML = renderBids();
+            else if (view === 'projects') content.innerHTML = renderClientProjects();
+            else if (view === 'reviews') content.innerHTML = renderReviews();
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const activeMap = { dashboard:'Dashboard', profile:'Profile', bids:'Bids', projects:'Projects', reviews:'Reviews' };
+            document.querySelectorAll('.nav-item').forEach(item => { if(item.innerText.includes(activeMap[view])) item.classList.add('active'); });
+        };
+
+        function renderAuth() {
+            const app = document.getElementById('app');
+            const animatedBg = document.createElement('div'); animatedBg.className = 'animated-bg';
+            const gradient = document.createElement('div'); gradient.className = 'gradient-overlay'; animatedBg.appendChild(gradient);
+            for(let i=0;i<25;i++){ const c=document.createElement('div'); c.className='circle'; c.style.width=c.style.height=`${Math.random()*120+40}px`; c.style.left=`${Math.random()*100}%`; c.style.animationDuration=`${Math.random()*20+10}s`; animatedBg.appendChild(c); }
+            for(let i=0;i<80;i++){ const p=document.createElement('div'); p.className='particle'; p.style.width=p.style.height=`${Math.random()*6+2}px`; p.style.top=`${Math.random()*100}%`; animatedBg.appendChild(p); }
+            const wave = document.createElement('div'); wave.className='wave'; animatedBg.appendChild(wave);
+            for(let i=0;i<150;i++){ const s=document.createElement('div'); s.className='glow-star'; s.style.top=`${Math.random()*100}%`; s.style.left=`${Math.random()*100}%`; animatedBg.appendChild(s); }
+            document.body.appendChild(animatedBg);
+            app.innerHTML = `<div class="auth-container"><div class="auth-card"><div class="auth-header"><h1>🎯 TalentLink</h1><p>Connect with top talent and opportunities</p></div>
+            <div class="tab-buttons"><button class="tab-btn active" onclick="window.switchTab('login')">Login</button><button class="tab-btn" onclick="window.switchTab('register')">Register</button></div>
+            <div id="auth-form">${renderLoginForm()}</div></div></div>`;
+        }
+
+        function renderLoginForm() { return `<form onsubmit="window.handleLogin(event)"><div class="form-group"><label>Email</label><input type="email" id="login-email" required placeholder="freelancer@example.com"></div><div class="form-group"><label>Password</label><input type="password" id="login-password" required placeholder="123"></div><button type="submit" class="btn-primary">Login</button></form>`; }
+        function renderRegisterForm() { return `<form onsubmit="window.handleRegister(event)"><div class="form-group"><label>Full Name</label><input type="text" id="reg-name" required></div><div class="form-group"><label>Email</label><input type="email" id="reg-email" required></div><div class="form-group"><label>Password</label><input type="password" id="reg-password" required></div><div class="form-group"><label>I am a</label><select id="reg-role" onchange="window.toggleFreelancerFields()"><option value="freelancer">Freelancer</option><option value="client">Client</option></select></div><div id="freelancer-fields"><div class="form-group"><label>Skills (comma separated)</label><input type="text" id="reg-skills" placeholder="React, Node.js"></div><div class="form-group"><label>Hourly Rate (USD)</label><input type="number" id="reg-rate" placeholder="50"></div></div><button type="submit" class="btn-primary">Register</button></form>`; }
+
+        function renderMainApp() {
+            const app = document.getElementById('app');
+            document.querySelector('.animated-bg')?.remove();
+            const isFreelancer = db.currentUser.role === 'freelancer';
+            const avgRating = getAverageRating(db.currentUser.id);
+            app.innerHTML = `<div class="app-container"><div class="main-layout"><div class="sidebar"><div class="user-info"><div class="avatar">${isFreelancer ? '💻' : '👔'}</div>
+            <div class="user-name">${db.currentUser.name}</div><div class="user-role">${isFreelancer ? `💰 Rs. ${convertToLKR(db.currentUser.hourlyRate).toLocaleString()}/hr` : 'Client'}</div>
+            ${isFreelancer ? `<div class="user-role">⭐ ${avgRating} (${db.reviews.filter(r => r.revieweeId === db.currentUser.id).length} reviews)</div>` : ''}</div>
+            <div class="nav-menu"><div class="nav-item active" onclick="window.switchView('dashboard')">📊 Dashboard</div><div class="nav-item" onclick="window.switchView('profile')">👤 Profile & Portfolio</div>
+            ${isFreelancer ? '<div class="nav-item" onclick="window.switchView(\'bids\')">💰 My Bids</div>' : '<div class="nav-item" onclick="window.switchView(\'projects\')">📋 My Projects</div>'}
+            <div class="nav-item" onclick="window.switchView('reviews')">⭐ Reviews</div><div class="nav-item" onclick="window.logout()">🚪 Logout</div></div></div>
+            <div class="main-content" id="main-content">${renderDashboard()}</div></div></div>`;
+        }
+
+        function render() {
+            const session = localStorage.getItem('talentlink_lkr_session_v2');
+            if(session) { db.currentUser = JSON.parse(session); renderMainApp(); }
+            else renderAuth();
+        }
+
+        window.switchTab = function(tab) {
+            const formDiv = document.getElementById('auth-form');
+            formDiv.innerHTML = tab === 'login' ? renderLoginForm() : renderRegisterForm();
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+        window.toggleFreelancerFields = function() {
+            const role = document.getElementById('reg-role');
+            const fields = document.getElementById('freelancer-fields');
+            if(fields) fields.style.display = role.value === 'freelancer' ? 'block' : 'none';
+        };
+        window.handleLogin = function(e) {
+            e.preventDefault();
+            if(login(document.getElementById('login-email').value, document.getElementById('login-password').value)) { showToast('Login successful!'); render(); }
+            else showToast('Invalid credentials', 'error');
+        };
+        window.handleRegister = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value, email = document.getElementById('reg-email').value, pass = document.getElementById('reg-password').value, role = document.getElementById('reg-role').value;
+            const skills = document.getElementById('reg-skills')?.value, rate = document.getElementById('reg-rate')?.value;
+            if(register(name, email, pass, role, skills, rate)) { showToast('Registration successful! Please login.'); window.switchTab('login'); }
+            else showToast('Email already exists', 'error');
+        };
+        window.logout = logout;
+        window.showCreateProjectModal = showCreateProjectModal;
+        window.showAddPortfolioModal = showAddPortfolioModal;
+        window.showBidModal = showBidModal;
+        window.showAddReviewModal = showAddReviewModal;
+        window.closeProjectModal = closeProjectModal;
+        window.closePortfolioModal = closePortfolioModal;
+        window.closeBidModal = closeBidModal;
+        window.closeReviewModal = closeReviewModal;
+
+        initDatabase();
+        render();
+    </script>
+</body>
+</html>
+```
